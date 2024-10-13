@@ -3,53 +3,52 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 
 
-export interface IUser extends Document {
-  username: string;
+export interface Iuser extends Document {
+  userName: string;
   email: string;
-  profile: {
-    bio?: string;
-    socialLinks?: string[];
-  };
-  posts: Types.ObjectId[];
   password: string;
+  role: 'student' | 'teacher';
+  grades: Types.ObjectId[];
+  class : Types.ObjectId; 
   comparePassword(userPassword: string): Promise<boolean>;
 }
 
-const UserSchema = new Schema<IUser>({
-  username: {
+const userSchema = new Schema<Iuser>({
+  userName: {
     type: String,
-    required: true,
-    unique: true
+    required: true  
   },
   email: {
     type: String,
     required: true,
-    unique: true,
-    validate: [validator.isEmail, "Please provide a valid email"]
+    unique: true
   },
-  profile: {
-    bio: String,
-    socialLinks: [String]
-  },
-  posts: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Post"
-    }
-  ],
   password: {
     type: String,
     required: true
-  }
-});
-UserSchema.pre("save", async function (next) {
+  },
+  role: {
+    type: String,
+    enum: ['student', 'teacher'],
+    default: 'student'
+  },
+  grades: {
+    type: [Number],
+    required: true
+  },
+  class : {
+    type: Schema.Types.ObjectId,
+    ref: "Class",
+    required: true
+  }});
+userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 })
 
-UserSchema.methods.comparePassword = async function (userPassword: string) : Promise<boolean> {
+userSchema.methods.comparePassword = async function (userPassword: string) : Promise<boolean> {
   return await bcrypt.compare(userPassword, this.password);
 };
-export default mongoose.model<IUser>("User", UserSchema);
+export default mongoose.model<Iuser>("User", userSchema);

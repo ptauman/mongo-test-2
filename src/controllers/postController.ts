@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import Post, { IPost } from "../models/postModel";
+import Post, { IPost } from "../models/classModel";
 import User from "../models/userModel";
 
 // Create a new post
