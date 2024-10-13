@@ -65,7 +65,7 @@ const connectUser = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         return res.status(401).json({ message: "שם משתמש או סיסמה שגויים" });
     }
     ;
-    const token = (0, auth_1.generateToken)(user.id, user.role);
+    const token = (0, auth_1.generateToken)(user.id, user.role, user.myClass);
     res.status(200).json({ token });
 });
 exports.connectUser = connectUser;

@@ -63,13 +63,15 @@ const authMiddleware = (req, res, next) => {
 };
 exports.authMiddleware = authMiddleware;
 const teacherAuthMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
-    if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.role) !== 'teacher') {
+    var _a, _b, _c, _d;
+    if (((_a = req.user) === null || _a === void 0 ? void 0 : _a.userRole) !== 'teacher') {
         res.status(403).json({ message: "Access denied, teachers only!" });
         return;
     }
     const student = yield uderDal.getStudentByEmail((_b = req.params) === null || _b === void 0 ? void 0 : _b.studentemail);
-    if ((student === null || student === void 0 ? void 0 : student.myClass) !== ((_c = req.user) === null || _c === void 0 ? void 0 : _c.myClass)) {
+    const myclass = student === null || student === void 0 ? void 0 : student.myClass;
+    if (myclass != ((_c = req.user) === null || _c === void 0 ? void 0 : _c.myClass)) {
+        console.log(student === null || student === void 0 ? void 0 : student.myClass, (_d = req.user) === null || _d === void 0 ? void 0 : _d.myClass);
         res.status(401).json({ message: "למה אתה פולש למה שלא קשור אליך!" });
         return;
     }

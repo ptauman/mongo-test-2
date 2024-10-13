@@ -7,7 +7,7 @@ import * as uderDal from "../dal/userDal"
 //לפני שאממש בפועל אני מגדיר אינטרפייס שיכלול משתמש
 
 export interface AuthRequest extends Request {
-    user?: { userId: string, role?: string, myClass?: string }
+    user?: { userId: string, userRole?: string, myClass?: string }
 };
 
 
@@ -33,11 +33,13 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 }
 
 export const teacherAuthMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
-    if (req.user?.role !=='teacher') {
+    if (req.user?.userRole !=='teacher') {
         res.status(403).json({message: "Access denied, teachers only!"}); return;
     } 
     const student = await uderDal.getStudentByEmail(req.params?.studentemail)
-    if (student?.myClass !== req.user?.myClass) {
+    const myclass = student?.myClass as unknown as string
+    if (myclass!= req.user?.myClass) {
+        console.log(student?.myClass, req.user?.myClass);
         res.status(401).json({message: "למה אתה פולש למה שלא קשור אליך!"}); return;
     }
     else {

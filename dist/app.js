@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express_1.default.json());
 (0, db_1.default)();
 // Routes
-app.use("/api/users", teacherRoutes_1.default);
+app.use("/api/teachers", teacherRoutes_1.default);
 app.use("/api/auth", authRoutes_1.default);
 app.use("/api/students", studentRoutes_1.default);
 // Error handling middleware

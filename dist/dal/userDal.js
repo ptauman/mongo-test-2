@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gradeDal = exports.getStudentByEmail = exports.studentGradesDal = void 0;
+exports.getTeacherById = exports.AllStudents = exports.gradeDal = exports.getStudentByEmail = exports.studentGradesDal = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const gradeModel_1 = __importDefault(require("../models/gradeModel"));
 const studentGradesDal = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -39,3 +39,19 @@ const gradeDal = (userId, gradeId) => __awaiter(void 0, void 0, void 0, function
     return grade;
 });
 exports.gradeDal = gradeDal;
+const AllStudents = (myClass) => __awaiter(void 0, void 0, void 0, function* () {
+    const students = yield userModel_1.default.find();
+    if (!students) {
+        return null;
+    }
+    return students;
+});
+exports.AllStudents = AllStudents;
+const getTeacherById = (teacherId) => __awaiter(void 0, void 0, void 0, function* () {
+    const teacher = yield userModel_1.default.findOne({ _id: teacherId }).populate("myClass");
+    if (!teacher) {
+        return null;
+    }
+    return teacher;
+});
+exports.getTeacherById = getTeacherById;

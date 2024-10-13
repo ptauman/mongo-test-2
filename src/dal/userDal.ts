@@ -30,4 +30,17 @@ export const gradeDal = async (userId : string, gradeId : string): Promise<IGrad
     }
     return grade;
 }
-    
+export const AllStudents = async (myClass: ObjectId): Promise<Iuser[] | null> => {
+    const students = await userModel.find();
+    if (!students) {
+        return null;
+    }
+    return students
+}
+export const getTeacherById = async (teacherId: string): Promise<Iuser | null> => {
+    const teacher = await userModel.findOne({ _id: teacherId }).populate("myClass");
+    if (!teacher) {
+        return null;
+    }
+    return teacher
+}

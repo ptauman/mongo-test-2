@@ -29,7 +29,8 @@ export const connectUser = async (req: any, res: any) => {
       return res.status(401).json({ message: "שם משתמש או סיסמה שגויים" })
   };
 
-  const token = generateToken(user.id, user.role);
+
+  const token = generateToken(user.id, user.role, user.myClass as any as string);
   res.status(200).json({ token });
 }
 

@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import authRouter from "./routes/authRoutes";
-import userRouter from "./routes/teacherRoutes";
+import teachersRouter from "./routes/teacherRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import connectDB from "./config/db";
 import studentRouter from "./routes/studentRoutes";
@@ -17,7 +17,7 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use("/api/users", userRouter);
+app.use("/api/teachers", teachersRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/students", studentRouter);
 
