@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 //לפני שאממש בפועל אני מגדיר אינטרפייס שיכלול משתמש
 
-interface AuthRequest extends Request {
+export interface AuthRequest extends Request {
     user?: { userId: string, role?: string }
 };
 

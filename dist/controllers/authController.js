@@ -60,7 +60,6 @@ const connectUser = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const { email } = req.params;
     const { password } = req.body;
     const user = yield userModel_1.default.findOne({ email });
-    console.log(user);
     if (!user || !(yield user.comparePassword(password))) {
         return res.status(401).json({ message: "שם משתמש או סיסמה שגויים" });
     }

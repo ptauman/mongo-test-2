@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const errorHandler_1 = require("../middleware/errorHandler");
+const authMiddlewere_1 = require("../middleware/authMiddlewere");
+const studentController_1 = require("../controllers/studentController");
 const studentRouter = (0, express_1.Router)();
-// studentRouter.get ("/:studentId", authMiddleware, errorHandler(getAllGRades));
-// studentRouter.get ("/:studentId/:gradeId", authMiddleware, errorHandler(getGradeById));
+studentRouter.get("/grade", authMiddlewere_1.authMiddleware, (0, errorHandler_1.errorHandler)(studentController_1.getStudentWithGrades));
+studentRouter.get("/:gradeId", authMiddlewere_1.authMiddleware, (0, errorHandler_1.errorHandler)(studentController_1.getGradeById));
 exports.default = studentRouter;

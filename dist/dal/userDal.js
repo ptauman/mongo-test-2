@@ -12,16 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getStudentWithGrades = void 0;
+exports.gradeDal = exports.studentGradesDal = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
-const getStudentWithGrades = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email } = req.params;
-    const student = yield userModel_1.default.findOne({ email }).populate("grades");
+const gradeModel_1 = __importDefault(require("../models/gradeModel"));
+const studentGradesDal = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const student = yield userModel_1.default.findOne({ _id: userId }).populate("grades");
     if (!student) {
-        res.status(401).json({ message: "לא נמצאו נותנים עבור סטודנט זה " });
-        return;
+        return null;
     }
-    res.status(200).json(student);
+    return student;
 });
-exports.getStudentWithGrades = getStudentWithGrades;
-// Optionally, add DELETE and EDIT functions
+exports.studentGradesDal = studentGradesDal;
+const gradeDal = (userId, gradeId) => __awaiter(void 0, void 0, void 0, function* () {
+    const grade = yield gradeModel_1.default.findOne({ _id: gradeId });
+    if (!grade) {
+        return null;
+    }
+    return grade;
+});
+exports.gradeDal = gradeDal;
