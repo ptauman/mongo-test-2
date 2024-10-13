@@ -16,7 +16,10 @@ exports.updateClassInTeacher = exports.createClass = exports.createTeacher = exp
 const userModel_1 = __importDefault(require("../models/userModel"));
 const classModel_1 = __importDefault(require("../models/classModel"));
 const createStudent = (userdata, classId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = new userModel_1.default(Object.assign(Object.assign({}, userdata), { role: "student", grades: [], class: classId }));
+    const user = new userModel_1.default(Object.assign(Object.assign({}, userdata), { role: "student", grades: [], myClass: classId }));
+    const classTo = yield classModel_1.default.findById(classId);
+    classTo === null || classTo === void 0 ? void 0 : classTo.students.push(user.id);
+    yield (classTo === null || classTo === void 0 ? void 0 : classTo.save());
     yield user.save();
     return user;
 });

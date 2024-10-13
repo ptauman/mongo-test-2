@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gradeDal = exports.studentGradesDal = void 0;
+exports.gradeDal = exports.getStudentByEmail = exports.studentGradesDal = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const gradeModel_1 = __importDefault(require("../models/gradeModel"));
 const studentGradesDal = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,6 +23,14 @@ const studentGradesDal = (userId) => __awaiter(void 0, void 0, void 0, function*
     return student;
 });
 exports.studentGradesDal = studentGradesDal;
+const getStudentByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const student = yield userModel_1.default.findOne({ email: email });
+    if (!student) {
+        return null;
+    }
+    return student;
+});
+exports.getStudentByEmail = getStudentByEmail;
 const gradeDal = (userId, gradeId) => __awaiter(void 0, void 0, void 0, function* () {
     const grade = yield gradeModel_1.default.findOne({ _id: gradeId });
     if (!grade) {

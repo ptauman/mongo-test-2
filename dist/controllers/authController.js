@@ -40,8 +40,8 @@ const userModel_1 = __importDefault(require("../models/userModel"));
 const auth_1 = require("../services/auth");
 const authDal = __importStar(require("../dal/authDal"));
 const registerStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { username, email, password, classId } = req.body;
-    const student = yield authDal.createStudent({ username, email, password }, classId);
+    const { username, email, password, myClass } = req.body;
+    const student = yield authDal.createStudent({ username, email, password }, myClass);
     if (!student) {
         return res.status(401).json({ message: "תקלה בהרשמה" });
     }
@@ -53,6 +53,7 @@ const registerTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function
     const { username, email, password, myClass } = req.body;
     const teacher = yield authDal.createTeacher({ username, email, password });
     const classId = yield authDal.createClass(myClass, teacher);
+    yield authDal.updateClassInTeacher(classId, teacher);
     res.status(201).json({ classId, message: "נרשמת בהצלחה  " });
 });
 exports.registerTeacher = registerTeacher;

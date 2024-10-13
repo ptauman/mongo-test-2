@@ -1,6 +1,5 @@
 
 import userModel, { Iuser } from "../models/userModel";
-import classModel,  { IClass } from "../models/classModel";
 import { ObjectId } from "mongodb";
 import { Request, Response } from "express";
 import * as uderDal from "../dal/userDal"

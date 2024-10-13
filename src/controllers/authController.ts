@@ -6,8 +6,8 @@ import { ObjectId } from "mongoose";
 
 
 export const registerStudent = async (req: Request, res: Response) => {
-  const { username, email, password, classId  } = req.body;
-    const student = await authDal.createStudent({   username, email, password}, classId );
+  const { username, email, password, myClass  } = req.body;
+    const student = await authDal.createStudent({   username, email, password}, myClass );
     if (!student) {
         return res.status(401).json({ message: "תקלה בהרשמה" }) 
     };
@@ -17,9 +17,8 @@ export const registerStudent = async (req: Request, res: Response) => {
 export const registerTeacher = async (req: Request, res: Response) => {
   const { username, email, password, myClass} = req.body;
     const teacher = await authDal.createTeacher({ username, email, password })
-
     const classId = await authDal.createClass(myClass, teacher)
-
+    await authDal.updateClassInTeacher(classId, teacher)
     res.status(201).json({classId, message: "נרשמת בהצלחה  " });
 }
 export const connectUser = async (req: any, res: any) => {

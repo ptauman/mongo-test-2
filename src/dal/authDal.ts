@@ -7,8 +7,11 @@ export const createStudent = async (userdata: Partial<Iuser>,classId:string): Pr
     ...userdata,
     role: "student",
     grades: [],
-    class:classId
+    myClass:classId
   })
+  const classTo = await classModel.findById(classId)
+  classTo?.students.push(user.id)
+  await classTo?.save();
    await user.save();
    return user
 
@@ -31,12 +34,12 @@ export const createClass = async (classname: string, teacher: string): Promise<I
   await newClass.save();
   return newClass.id;
 }
-export const updateClassInTeacher = async (classId: ObjectId, teacherId: string): Promise<Object> => {
+export const updateClassInTeacher = async (classId: IClass, teacherId: string): Promise<Object> => {
   const user = await userModel.findById(teacherId);
   if (!user) {
     throw new Error("User not found");
   }
-  user.myClass = classId;
+  user.myClass = classId as unknown as ObjectId;
   await user.save();
   return user.myClass;
 } 

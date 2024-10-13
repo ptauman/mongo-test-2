@@ -1,11 +1,13 @@
 //פונקציה גנרית לאימות תוקן של משתמש
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import * as uderDal from "../dal/userDal"
+
 
 //לפני שאממש בפועל אני מגדיר אינטרפייס שיכלול משתמש
 
 export interface AuthRequest extends Request {
-    user?: { userId: string, role?: string }
+    user?: { userId: string, role?: string, myClass?: string }
 };
 
 
@@ -30,10 +32,15 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
     }
 }
 
-export const teacherAuthMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
+export const teacherAuthMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.user?.role !=='teacher') {
-        res.status(403).json({message: "Access denied, teachers only!"})
-    } else {
+        res.status(403).json({message: "Access denied, teachers only!"}); return;
+    } 
+    const student = await uderDal.getStudentByEmail(req.params?.studentemail)
+    if (student?.myClass !== req.user?.myClass) {
+        res.status(401).json({message: "למה אתה פולש למה שלא קשור אליך!"}); return;
+    }
+    else {
         next()
     }
 }
