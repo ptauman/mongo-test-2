@@ -35,48 +35,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importStar(require("mongoose"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const userSchema = new mongoose_1.Schema({
-    username: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        enum: ['student', 'teacher'],
-        default: 'student'
-    },
-    grades: {
-        type: [mongoose_1.Schema.Types.ObjectId],
-        ref: "Grade",
-        required: true
-    },
-    myClass: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Class",
+exports.login = exports.registerTeacher = exports.registerStudent = void 0;
+const userModel_1 = __importDefault(require("../models/userModel"));
+const auth_1 = require("../services/auth");
+const authDal = __importStar(require("../dal/authDal"));
+const registerStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, email, password, classId } = req.body;
+    const student = yield authDal.createStudent({ username, email, password }, classId);
+    if (!student) {
+        return res.status(401).json({ message: "תקלה בהרשמה" });
     }
+    ;
+    res.status(201).json({ message: "נרשמת בהצלחה  " });
 });
-userSchema.pre("save", function (next) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (this.isModified("password")) {
-            this.password = yield bcrypt_1.default.hash(this.password, 10);
-        }
-        next();
-    });
+exports.registerStudent = registerStudent;
+const registerTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { username, email, password, myClass } = req.body;
+    const teacher = yield authDal.createTeacher({ username, email, password });
+    const classId = yield authDal.createClass(myClass, teacher);
+    res.status(201).json({ classId, message: "נרשמת בהצלחה  " });
 });
-userSchema.methods.comparePassword = function (userPassword) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield bcrypt_1.default.compare(userPassword, this.password);
-    });
-};
-exports.default = mongoose_1.default.model("User", userSchema);
+exports.registerTeacher = registerTeacher;
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    const user = yield userModel_1.default.findOne({ email });
+    if (!user || !(yield user.comparePassword(password))) {
+        return res.status(401).json({ message: "שם משתמש או סיסמה שגויים" });
+    }
+    ;
+    const token = (0, auth_1.generateToken)(user.id, user.role);
+    res.status(200).json({ token });
+});
+exports.login = login;

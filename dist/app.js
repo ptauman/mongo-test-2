@@ -5,9 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const postRoutes_1 = __importDefault(require("./routes/postRoutes"));
-const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
-const errorHandler_1 = require("./middleware/errorHandler");
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const teacherRoutes_1 = __importDefault(require("./routes/teacherRoutes"));
 const db_1 = __importDefault(require("./config/db"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -16,10 +15,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express_1.default.json());
 (0, db_1.default)();
 // Routes
-app.use("/api/posts", postRoutes_1.default);
-app.use("/api/users", userRoutes_1.default);
+app.use("/api/users", teacherRoutes_1.default);
+app.use("/api/auth", authRoutes_1.default);
 // Error handling middleware
-app.use(errorHandler_1.errorHandler);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

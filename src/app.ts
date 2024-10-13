@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import postRouter from "./routes/studentRoutes";
+import authRouter from "./routes/authRoutes";
 import userRouter from "./routes/teacherRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import connectDB from "./config/db";
@@ -16,8 +16,8 @@ app.use(express.json());
 connectDB();
 
 // Routes
-app.use("/api/posts", postRouter);
 app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
 
 
 // Error handling middleware

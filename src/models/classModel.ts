@@ -3,19 +3,21 @@ import bcrypt from "bcrypt";
 
 
 export interface IClass extends Document {
-  className: string;
+  classname: string;
   teacher: Types.ObjectId;
   students: Types.ObjectId[];
 }
 const classSchema = new Schema<IClass>({
-  className: {
+  classname: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   teacher: {
     type: Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
+    unique: true
   },
   students: [
     {
@@ -24,4 +26,4 @@ const classSchema = new Schema<IClass>({
     }
   ]
 });
-export default mongoose.model<IClass>("Post", classSchema);
+export default mongoose.model<IClass>("class", classSchema);
