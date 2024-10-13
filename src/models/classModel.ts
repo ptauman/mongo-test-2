@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
-import bcrypt from "bcrypt";
 
 
 export interface IClass extends Document {

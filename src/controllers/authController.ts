@@ -22,9 +22,10 @@ export const registerTeacher = async (req: Request, res: Response) => {
 
     res.status(201).json({classId, message: "נרשמת בהצלחה  " });
 }
-export const login = async (req: any, res: any) => {
-  const { email, password } = req.body;
-  const user = await UserModel.findOne({ email });
+export const connectUser = async (req: any, res: any) => {
+  const {email}  = req.params;
+  const { password } = req.body;
+  const user = await UserModel.findOne({email});
   if (!user || !(await user.comparePassword(password))) {
       return res.status(401).json({ message: "שם משתמש או סיסמה שגויים" })
   };

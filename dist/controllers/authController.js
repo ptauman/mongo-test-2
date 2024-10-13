@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.registerTeacher = exports.registerStudent = void 0;
+exports.connectUser = exports.registerTeacher = exports.registerStudent = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 const auth_1 = require("../services/auth");
 const authDal = __importStar(require("../dal/authDal"));
@@ -56,9 +56,11 @@ const registerTeacher = (req, res) => __awaiter(void 0, void 0, void 0, function
     res.status(201).json({ classId, message: "נרשמת בהצלחה  " });
 });
 exports.registerTeacher = registerTeacher;
-const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
+const connectUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.params;
+    const { password } = req.body;
     const user = yield userModel_1.default.findOne({ email });
+    console.log(user);
     if (!user || !(yield user.comparePassword(password))) {
         return res.status(401).json({ message: "שם משתמש או סיסמה שגויים" });
     }
@@ -66,4 +68,4 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = (0, auth_1.generateToken)(user.id, user.role);
     res.status(200).json({ token });
 });
-exports.login = login;
+exports.connectUser = connectUser;
