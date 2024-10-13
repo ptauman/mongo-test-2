@@ -15,6 +15,22 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 connectDB();
+const options = {
+  failOnErrors: true,
+  definition: {
+      openapi: '3.0.0',
+      info: {
+          title: 'Employees project',
+          version: '1.0.0',
+      },
+      servers: [
+          {
+              url: 'http://localhost:3000'
+          }
+      ]
+  },
+  apis: ['./src/routes/*.ts'],
+}
 
 // Routes
 app.use("/api/teachers", teachersRouter);

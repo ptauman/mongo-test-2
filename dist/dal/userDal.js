@@ -55,3 +55,4 @@ const getTeacherById = (teacherId) => __awaiter(void 0, void 0, void 0, function
     return teacher;
 });
 exports.getTeacherById = getTeacherById;
+// export  const gatAverageOfClass = async (claasid: ObjectId): Promise<number | null> => {

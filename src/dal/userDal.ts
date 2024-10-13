@@ -44,3 +44,4 @@ export const getTeacherById = async (teacherId: string): Promise<Iuser | null> =
     }
     return teacher
 }
+// export  const gatAverageOfClass = async (claasid: ObjectId): Promise<number | null> => {
